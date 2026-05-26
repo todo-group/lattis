@@ -1,0 +1,9 @@
+prefix=${pcfiledir}/../..
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: lattis
+Description: A simple lattice/graph library with Rust XML backend
+Version: @LATTIS_PKG_VERSION@
+Libs: -L${libdir} -llattis_ffi
+Cflags: -I${includedir}

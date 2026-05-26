@@ -18,7 +18,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include "lattice/rust_xml_ffi.h"
+#include "lattis/rust_xml_ffi.h"
 
 namespace {
 
@@ -48,9 +48,9 @@ void TestReadFromLatticesDocument() {
 </LATTICES>
   )";
 
-  lattice_basis_raw* bs = lattice_basis_from_xml(xml, "square lattice");
-  lattice_unitcell_raw* cell = lattice_unitcell_from_xml(xml, "simple2d");
-  lattice_graph_raw* lat = lattice_graph_from_xml(xml, "triangle");
+  lattis_basis_raw* bs = lattis_basis_from_xml(xml, "square lattice");
+  lattis_unitcell_raw* cell = lattis_unitcell_from_xml(xml, "simple2d");
+  lattis_graph_raw* lat = lattis_graph_from_xml(xml, "triangle");
 
   Check(bs != nullptr, "failed to read basis");
   Check(cell != nullptr, "failed to read unitcell");
@@ -64,13 +64,13 @@ void TestReadFromLatticesDocument() {
   Check(lat->num_sites == 3, "graph site count mismatch");
   Check(lat->num_bonds == 3, "graph bond count mismatch");
 
-  lattice_basis_raw_free(bs);
-  lattice_unitcell_raw_free(cell);
-  lattice_graph_raw_free(lat);
+  lattis_basis_raw_free(bs);
+  lattis_unitcell_raw_free(cell);
+  lattis_graph_raw_free(lat);
 }
 
 void TestWriteThenReadGraph() {
-  lattice_graph_raw raw{};
+  lattis_graph_raw raw{};
   raw.dim = 1;
   raw.num_sites = 4;
   raw.num_bonds = 4;
@@ -88,17 +88,17 @@ void TestWriteThenReadGraph() {
   raw.bond_targets = bond_targets;
   raw.bond_types = bond_types;
 
-  char* xml = lattice_graph_to_xml("chain4", &raw);
+  char* xml = lattis_graph_to_xml("chain4", &raw);
   Check(xml != nullptr, "failed to write graph XML");
 
-  lattice_graph_raw* loaded = lattice_graph_from_xml(xml, "chain4");
-  lattice_string_free(xml);
+  lattis_graph_raw* loaded = lattis_graph_from_xml(xml, "chain4");
+  lattis_string_free(xml);
 
   Check(loaded != nullptr, "failed to read back graph");
   Check(loaded->dim == 1, "graph dimension after round-trip mismatch");
   Check(loaded->num_sites == 4, "graph site count after round-trip mismatch");
   Check(loaded->num_bonds == 4, "graph bond count after round-trip mismatch");
-  lattice_graph_raw_free(loaded);
+  lattis_graph_raw_free(loaded);
 }
 
 } // namespace

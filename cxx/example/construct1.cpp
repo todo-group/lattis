@@ -15,9 +15,9 @@
 */
 
 #include <iostream>
-#include "lattice/graph.hpp"
+#include "lattis/graph.hpp"
 
 int main() {
-  lattice::graph lat = lattice::graph::simple(1, 16);
+  lattis::graph lat = lattis::graph::simple(1, 16);
   lat.print(std::cout);
 }

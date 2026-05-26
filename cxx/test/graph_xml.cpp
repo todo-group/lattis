@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/graph_xml.hpp"
+#include "lattis/graph_xml.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 TEST(GraphXMLTest, WriteXML) {
   const std::string xml = write_xml("square lattice", graph::simple(2, 4));

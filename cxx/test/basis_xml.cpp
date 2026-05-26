@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/basis_xml.hpp"
+#include "lattis/basis_xml.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 class BasisIoTest : public testing::Test {
 public:

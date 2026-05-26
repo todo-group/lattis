@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/supercell.hpp"
+#include "lattis/supercell.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 void check(const supercell& supercell) {
   for (std::size_t i = 0; i < supercell.num_cells(); ++i) {

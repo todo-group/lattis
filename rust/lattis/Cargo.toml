@@ -1,0 +1,13 @@
+[package]
+name = "lattis"
+version.workspace = true
+edition = "2021"
+license = "Apache-2.0"
+description = "A simple lattice/graph library"
+repository = "https://github.com/todo-group/lattis"
+readme = "../../README.md"
+keywords = ["lattice", "graph", "physics"]
+
+[dependencies]
+nalgebra = { version = "0.33", default-features = false, features = ["std"] }
+roxmltree = "0.20"

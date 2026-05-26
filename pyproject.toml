@@ -3,9 +3,9 @@ requires = ["maturin>=1,<2"]
 build-backend = "maturin"
 
 [project]
-name = "lattice-graph-core"
-version = "0.2.2"
-description = "Simple Lattice/Graph Library"
+name = "lattis"
+dynamic = ["version"]
+description = "A simple lattice/graph library"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 dependencies = [
@@ -32,14 +32,14 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/todo-group/lattice"
-Documentation = "https://github.com/todo-group/lattice/blob/main/docs/pypi.md"
-Repository = "https://github.com/todo-group/lattice"
-Issues = "https://github.com/todo-group/lattice/issues"
+Homepage = "https://github.com/todo-group/lattis"
+Documentation = "https://github.com/todo-group/lattis/blob/main/docs/pypi.md"
+Repository = "https://github.com/todo-group/lattis"
+Issues = "https://github.com/todo-group/lattis/issues"
 
 [tool.maturin]
-manifest-path = "rust/lattice-python/Cargo.toml"
-module-name = "lattice"
+manifest-path = "rust/lattis-python/Cargo.toml"
+module-name = "lattis"
 bindings = "pyo3"
 include = [
   { path = "README.md", format = "sdist" },

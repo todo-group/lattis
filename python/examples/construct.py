@@ -1,4 +1,4 @@
-import lattice
+import lattis
 
 
 def describe(name, graph):
@@ -10,29 +10,29 @@ def describe(name, graph):
 
 
 def main():
-    chain = lattice.Graph.simple(1, 16)
+    chain = lattis.graph.simple(1, 16)
     describe("periodic chain", chain)
 
-    square = lattice.Graph.simple(2, 4)
+    square = lattis.graph.simple(2, 4)
     describe("periodic square lattice", square)
     print(f"  coordinates shape = {square.coordinates().shape}")
     print(f"  edges shape       = {square.edges().shape}")
 
-    basis = lattice.Basis([[1.0, 0.0], [0.0, 1.0]])
-    unitcell = lattice.Unitcell(2)
+    basis = lattis.Basis([[1.0, 0.0], [0.0, 1.0]])
+    unitcell = lattis.Unitcell(2)
     unitcell.add_site([0.0, 0.0])
     unitcell.add_bond(0, 0, [1, 0])
     unitcell.add_bond(0, 0, [0, 1])
 
-    generic_square = lattice.Graph.from_basis_unitcell_extent(
+    generic_square = lattis.graph.from_basis_unitcell_extent(
         basis,
         unitcell,
         [4, 4],
-        [lattice.Boundary.Periodic, lattice.Boundary.Periodic],
+        [lattis.Boundary.Periodic, lattis.Boundary.Periodic],
     )
     describe("generic square lattice", generic_square)
 
-    complete = lattice.Graph.fully_connected(10)
+    complete = lattis.graph.fully_connected(10)
     describe("fully connected graph", complete)
 
 

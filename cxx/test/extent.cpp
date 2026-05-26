@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/extent.hpp"
+#include "lattis/extent.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 std::size_t volume(const span_t& span) {
   return std::size_t(span.cast<double>().determinant() + 0.1);

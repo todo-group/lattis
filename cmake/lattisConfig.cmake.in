@@ -1,0 +1,18 @@
+@PACKAGE_INIT@
+
+set_and_check(LATTIS_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+set_and_check(LATTIS_LIBRARY_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
+set(_lattis_ffi "${LATTIS_LIBRARY_DIR}/@CMAKE_SHARED_LIBRARY_PREFIX@lattis_ffi@CMAKE_SHARED_LIBRARY_SUFFIX@")
+
+if(NOT TARGET lattis::lattis)
+  add_library(lattis::lattis INTERFACE IMPORTED)
+  set_target_properties(lattis::lattis PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${LATTIS_INCLUDE_DIR}"
+    INTERFACE_LINK_LIBRARIES "${_lattis_ffi}"
+  )
+endif()
+
+set(LATTIS_INCLUDE_DIRS "${LATTIS_INCLUDE_DIR}")
+set(LATTIS_LIBRARIES lattis::lattis)
+
+check_required_components(lattis)

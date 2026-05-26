@@ -1,9 +1,9 @@
 # Publishing to crates.io
 
-The primary crates.io package is `lattice-core`.
+The primary crates.io package is `lattis`.
 
-`lattice-python` is a PyPI extension crate and should normally not be published
-to crates.io. `lattice-ffi` is optional; publish it only if downstream Rust/C
+`lattis-python` is a PyPI extension crate and should normally not be published
+to crates.io. `lattis-ffi` is optional; publish it only if downstream Rust/C
 consumers need the C ABI crate directly.
 
 ## One-time setup
@@ -27,56 +27,56 @@ The token is secret. Revoke it on crates.io if it is ever exposed.
 Run tests:
 
 ```sh
-cargo test -p lattice-core
+cargo test -p lattis
 ```
 
 Check the package without uploading:
 
 ```sh
-cargo publish -p lattice-core --dry-run
+cargo publish -p lattis --dry-run
 ```
 
 Inspect the packaged files:
 
 ```sh
-cargo package -p lattice-core --list
+cargo package -p lattis --list
 ```
 
 If the package contains unnecessary files, add `include` or `exclude` entries to
-`rust/lattice-core/Cargo.toml` before publishing.
+`rust/lattis/Cargo.toml` before publishing.
 
-## Publish lattice-core
+## Publish lattis
 
 Publish:
 
 ```sh
-cargo publish -p lattice-core
+cargo publish -p lattis
 ```
 
 After publishing, docs.rs should build the documentation automatically:
 
 ```text
-https://docs.rs/lattice-core
+https://docs.rs/lattis
 ```
 
-## Publishing lattice-ffi, if needed
+## Publishing lattis-ffi, if needed
 
-Publish `lattice-ffi` only after `lattice-core` is available on crates.io.
+Publish `lattis-ffi` only after `lattis` is available on crates.io.
 
 Before publishing, make sure the dependency has both a path for local workspace
 development and a version for crates.io resolution:
 
 ```toml
-lattice-core = { version = "0.1.0", path = "../lattice-core" }
+lattis = { version = "x.y.z", path = "../lattis" }
 ```
 
 Then run:
 
 ```sh
-cargo test -p lattice-ffi
-cargo publish -p lattice-ffi --dry-run
-cargo package -p lattice-ffi --list
-cargo publish -p lattice-ffi
+cargo test -p lattis-ffi
+cargo publish -p lattis-ffi --dry-run
+cargo package -p lattis-ffi --list
+cargo publish -p lattis-ffi
 ```
 
 ## Versioning rules
@@ -87,16 +87,16 @@ crates.io releases are permanent:
 * uploaded package contents cannot be deleted
 * fixes require a new version
 
-For example, after publishing `0.1.0`, a fix should be released as `0.1.1` or a
-later SemVer-compatible version.
+For example, after publishing `<version>`, a fix should be released as the next
+SemVer-compatible version.
 
 ## Release checklist
 
-1. Update the crate version in `Cargo.toml`.
-2. Run `cargo test -p lattice-core`.
-3. Run `cargo publish -p lattice-core --dry-run`.
-4. Inspect `cargo package -p lattice-core --list`.
+1. Update `version` under `[workspace.package]` in the root `Cargo.toml`.
+2. Run `cargo test -p lattis`.
+3. Run `cargo publish -p lattis --dry-run`.
+4. Inspect `cargo package -p lattis --list`.
 5. Commit the release changes.
-6. Tag the release, for example `v0.1.0`.
-7. Run `cargo publish -p lattice-core`.
+6. Tag the release, for example `v<version>`.
+7. Run `cargo publish -p lattis`.
 8. Confirm the crate page and docs.rs page are live.

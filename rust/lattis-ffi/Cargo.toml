@@ -1,0 +1,16 @@
+[package]
+name = "lattis-ffi"
+version.workspace = true
+edition = "2021"
+publish = false
+license = "Apache-2.0"
+description = "C ABI for lattis XML compatibility"
+repository = "https://github.com/todo-group/lattis"
+readme = "../../README.md"
+keywords = ["lattice", "ffi", "graph"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+lattis = { path = "../lattis" }

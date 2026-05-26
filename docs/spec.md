@@ -1,57 +1,45 @@
-**Python Bindings Plan**
+**Python Bindings**
 
-Use **PyO3 + maturin** and add a new workspace crate:
+The Python package is built with **PyO3 + maturin** from the workspace crate:
 
-`rust/lattice-python`
+```text
+rust/lattis-python
+```
 
-This should wrap `lattice-core` directly, not the existing `lattice-ffi`. The C ABI is useful for C++ compatibility, but Python will be cleaner, safer, and more ergonomic if it binds the Rust structs through PyO3.
+It wraps the Rust `lattis` crate directly. The separate `lattis-ffi` crate is
+kept for C++ compatibility through the C ABI.
 
-**Phase 1: Packaging Skeleton**
+**Packaging**
 
-Add:
+The PyPI distribution and Python import name are both:
 
-- `rust/lattice-python/Cargo.toml`
-- `rust/lattice-python/src/lib.rs`
-- root or Python-package-level `pyproject.toml`
-- workspace entry in `Cargo.toml`
+```text
+lattis
+```
 
-Package name suggestion:
+Package versioning is centralized in the root `Cargo.toml`:
 
 ```toml
-name = "lattice"
+[workspace.package]
+version = "x.y.z"
 ```
 
-Rust crate name:
+Rust crates inherit that version with `version.workspace = true`, Python gets it
+through maturin's dynamic version support, and CMake reads it for the C++
+package version.
 
-```toml
-name = "lattice-python"
-```
+**Python API**
 
-Python module:
-
-```python
-import lattice
-```
-
-Use maturin:
-
-```sh
-maturin develop
-pytest
-```
-
-**Phase 2: Minimal Public API**
-
-Expose Python classes matching the Rust model:
+Python exposes:
 
 ```python
 Basis
 Unitcell
-Graph
+graph
 Boundary
 ```
 
-Initial constructors:
+Constructors:
 
 ```python
 Basis.simple(dim)
@@ -60,14 +48,14 @@ Basis(matrix)
 Unitcell(dim)
 Unitcell.simple(dim)
 
-Graph(dim)
-Graph.simple(dim, length)
-Graph.fully_connected(num_sites)
-Graph.from_basis_unitcell_extent(basis, unitcell, extent, boundary)
-Graph.from_basis_unitcell_length(basis, unitcell, length, boundary)
+graph(dim)
+graph.simple(dim, length)
+graph.fully_connected(num_sites)
+graph.from_basis_unitcell_extent(basis, unitcell, extent, boundary)
+graph.from_basis_unitcell_length(basis, unitcell, length, boundary)
 ```
 
-Initial methods/properties:
+graph methods and properties:
 
 ```python
 graph.dimension
@@ -86,20 +74,19 @@ graph.add_site(coordinate, site_type=0)
 graph.add_bond(source, target, bond_type=0)
 ```
 
-For Python ergonomics, also add bulk accessors early:
+Bulk accessors:
 
 ```python
 graph.coordinates()
+graph.coordinates_list()
 graph.site_types()
 graph.edges()
 graph.bond_types()
 ```
 
-Those will matter more than one-at-a-time calls for Python performance.
+**XML API**
 
-**Phase 3: XML API**
-
-Expose the existing XML helpers as module functions:
+Module-level functions:
 
 ```python
 read_basis_from_string(xml, name)
@@ -115,33 +102,33 @@ write_unitcell_to_string(name, unitcell)
 write_graph_to_string(name, graph)
 ```
 
-Maybe use Python naming aliases too:
+Class helpers:
 
 ```python
 Basis.from_xml(...)
-Graph.to_xml(...)
+Basis.from_xml_file(...)
+Unitcell.from_xml(...)
+Unitcell.from_xml_file(...)
+graph.from_xml(...)
+graph.from_xml_file(...)
+
+basis.to_xml(...)
+unitcell.to_xml(...)
+graph.to_xml(...)
 ```
 
-but keep the module-level functions first so they map clearly to Rust.
+**NumPy Support**
 
-**Phase 4: NumPy Support**
+The bindings return NumPy arrays for bulk data:
 
-Make NumPy optional but strongly recommended.
-
-Return:
-
-- basis matrix as `numpy.ndarray`
+- basis matrix as shape `(dim, dim)`
 - graph coordinates as shape `(num_sites, dim)`
 - edges as shape `(num_bonds, 2)`
-- site/bond types as integer arrays
+- site and bond types as integer arrays
 
-Accept Python sequences first, then optimize for NumPy inputs once the API is stable.
+**Errors**
 
-**Phase 5: Errors**
-
-Replace Rust panics crossing the Python boundary with Python exceptions.
-
-Important because current Rust methods use `assert!` / `panic!` for things like dimension mismatch and invalid site indices. The Python wrapper should validate before calling, returning:
+The Python boundary converts invalid user inputs into Python exceptions:
 
 ```python
 ValueError
@@ -149,56 +136,37 @@ IndexError
 RuntimeError
 ```
 
-Longer-term, `lattice-core` itself could move from panics to `Result` for public constructors/mutators, but the Python binding can shield users initially.
+This keeps Rust panics from crossing into Python for common invalid dimensions,
+indices, lengths, and XML failures.
 
-**Phase 6: Tests And Docs**
+**Local Development**
 
-Add Python tests under something like:
-
-```text
-python/tests/
-```
-
-or:
-
-```text
-rust/lattice-python/tests/
-```
-
-Test first:
-
-- `Graph.simple(1, 16)`
-- `Graph.simple(2, 4)`
-- `Unitcell.simple`
-- XML read/write round trips
-- invalid dimension/index errors
-- NumPy array shapes if NumPy is enabled
-
-Add README section:
+Install the editable Python extension:
 
 ```sh
-pip install maturin
-maturin develop -m rust/lattice-python/Cargo.toml
-python -c "import lattice; print(lattice.Graph.simple(2, 4).num_sites)"
+python3 -m venv .venv
+.venv/bin/python -m pip install maturin numpy
+.venv/bin/python -m maturin develop
 ```
 
-**Phase 7: Wheels / CI**
+Run tests:
 
-Once local bindings work:
+```sh
+.venv/bin/python -m unittest discover -s python/tests
+```
 
-- add GitHub Actions job using `maturin-action`
-- build wheels for macOS, Linux, Windows
-- test import from built wheel
-- optionally publish to PyPI later
+Smoke test:
 
-**Recommended First Milestone**
+```sh
+.venv/bin/python -c "import lattis; print(lattis.graph.simple(2, 4).num_sites)"
+```
 
-Implement a thin, usable MVP:
+**Example**
 
 ```python
-import lattice
+import lattis
 
-g = lattice.Graph.simple(2, 4)
+g = lattis.graph.simple(2, 4)
 
 assert g.dimension == 2
 assert g.num_sites == 16
@@ -206,5 +174,3 @@ assert g.num_bonds == 32
 print(g.coordinate(0))
 print(g.edges())
 ```
-
-That gives you a real Python package quickly, exercises the Rust core, and sets up the shape for Julia bindings later without disturbing the C++ bridge.

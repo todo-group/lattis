@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/graph.hpp"
+#include "lattis/graph.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 void check(const graph& lat) {
   for (std::size_t s = 0; s < lat.num_sites(); ++s) {

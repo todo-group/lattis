@@ -16,9 +16,9 @@
 
 #include <sstream>
 #include "gtest/gtest.h"
-#include "lattice/unitcell_xml.hpp"
+#include "lattis/unitcell_xml.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 TEST(UnitcellXMLTest, WriteXML) {
   const std::string xml1 = write_xml("simple1d", unitcell::simple(1));

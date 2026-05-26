@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/unitcell.hpp"
+#include "lattis/unitcell.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 TEST(UnitcellTest, SimpleSquare1) {
   unitcell unitcell(2);

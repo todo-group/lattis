@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/basis.hpp"
+#include "lattis/basis.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 TEST(BasisTest, SimpleBasis0) {
   basis basis = basis::simple(0);

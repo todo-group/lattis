@@ -1,11 +1,14 @@
 [workspace]
 members = [
-  "rust/lattice-core",
-  "rust/lattice-ffi",
-  "rust/lattice-python",
+  "rust/lattis",
+  "rust/lattis-ffi",
+  "rust/lattis-python",
 ]
 default-members = [
-  "rust/lattice-core",
-  "rust/lattice-ffi",
+  "rust/lattis",
+  "rust/lattis-ffi",
 ]
 resolver = "2"
+
+[workspace.package]
+version = "0.3.0"

@@ -15,17 +15,17 @@
 */
 
 #include <iostream>
-#include "lattice/graph.hpp"
+#include "lattis/graph.hpp"
 
 int main() {
-  lattice::basis_t bs(2, 2); bs << 1, 0, 0, 1; // 2x2 matrix
-  lattice::basis basis(bs);
-  lattice::unitcell unitcell(2);
-  unitcell.add_site(lattice::coordinate(0, 0), 0);
-  unitcell.add_bond(0, 0, lattice::offset(1, 0), 0);
-  unitcell.add_bond(0, 0, lattice::offset(0, 1), 0);
-  lattice::span_t span(2, 2); span << 4, 0, 0, 4; // 2x2 matrix
-  std::vector<lattice::boundary_t> boundary(2, lattice::boundary_t::periodic);
-  lattice::graph lat(basis, unitcell, span, boundary);
+  lattis::basis_t bs(2, 2); bs << 1, 0, 0, 1; // 2x2 matrix
+  lattis::basis basis(bs);
+  lattis::unitcell unitcell(2);
+  unitcell.add_site(lattis::coordinate(0, 0), 0);
+  unitcell.add_bond(0, 0, lattis::offset(1, 0), 0);
+  unitcell.add_bond(0, 0, lattis::offset(0, 1), 0);
+  lattis::span_t span(2, 2); span << 4, 0, 0, 4; // 2x2 matrix
+  std::vector<lattis::boundary_t> boundary(2, lattis::boundary_t::periodic);
+  lattis::graph lat(basis, unitcell, span, boundary);
   lat.print(std::cout);
 }

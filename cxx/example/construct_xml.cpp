@@ -16,9 +16,9 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "lattice/basis_xml.hpp"
-#include "lattice/graph_xml.hpp"
-#include "lattice/unitcell_xml.hpp"
+#include "lattis/basis_xml.hpp"
+#include "lattis/graph_xml.hpp"
+#include "lattis/unitcell_xml.hpp"
 
 int main(int argc, char **argv) {
   std::string file = "lattices.xml";
@@ -37,25 +37,25 @@ int main(int argc, char **argv) {
     }
   }
 
-  lattice::basis bs;
+  lattis::basis bs;
   if (!read_xml_file(file, basis_name, bs)) {
     std::cerr << "Failed to read basis XML entry: " << basis_name << "\n";
     exit(127);
   }
-  lattice::unitcell cell;
+  lattis::unitcell cell;
   if (!read_xml_file(file, cell_name, cell)) {
     std::cerr << "Failed to read unitcell XML entry: " << cell_name << "\n";
     exit(127);
   }
   switch (cell.dimension()) {
   case 1:
-    { lattice::graph lat(bs, cell, lattice::extent(length)); lat.print(std::cout); }
+    { lattis::graph lat(bs, cell, lattis::extent(length)); lat.print(std::cout); }
     break;
   case 2:
-    { lattice::graph lat(bs, cell, lattice::extent(length, length)); lat.print(std::cout); }
+    { lattis::graph lat(bs, cell, lattis::extent(length, length)); lat.print(std::cout); }
     break;
   case 3:
-    { lattice::graph lat(bs, cell, lattice::extent(length, length, length)); lat.print(std::cout); }
+    { lattis::graph lat(bs, cell, lattis::extent(length, length, length)); lat.print(std::cout); }
     break;
   default:
     std::cerr << "Unsupported lattice dimension\n";

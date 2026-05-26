@@ -16,7 +16,7 @@ jobs:
     - name: install eigen3
       run: sudo apt-get install libeigen3-dev
     - name: cmake
-      run: mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-Wall -Werror" -DLATTICE_BUILD_TESTS=ON ..
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-Wall -Werror" -DLATTIS_BUILD_TESTS=ON ..
     - name: make
       run: cd build && make
     - name: ctest
@@ -32,7 +32,7 @@ jobs:
     - name: install eigen3
       run: sudo apt-get install -y libeigen3-dev
     - name: configure rust xml
-      run: cmake -S . -B build-rustxml -DLATTICE_BUILD_TESTS=ON
+      run: cmake -S . -B build-rustxml -DLATTIS_BUILD_TESTS=ON
     - name: build rust xml smoke
       run: cmake --build build-rustxml --target test_rust_xml_bridge
     - name: run rust xml smoke
@@ -56,7 +56,7 @@ jobs:
     - name: install python build tools
       run: .venv/bin/python -m pip install maturin numpy
     - name: check python crate
-      run: cargo check -p lattice-python
+      run: cargo check -p lattis-python
     - name: install python bindings
       run: .venv/bin/python -m maturin develop
     - name: run python tests

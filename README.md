@@ -1,12 +1,13 @@
-[![Build](https://github.com/todo-group/lattice/actions/workflows/build.yml/badge.svg)](https://github.com/todo-group/lattice/actions/workflows/build.yml)
-[![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C.svg)](https://isocpp.org/)
+[![Build](https://github.com/todo-group/lattis/actions/workflows/build.yml/badge.svg)](https://github.com/todo-group/lattis/actions/workflows/build.yml)
 [![Rust](https://img.shields.io/badge/Rust-stable-000000.svg)](https://www.rust-lang.org/)
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C.svg)](https://isocpp.org/)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB.svg)](https://www.python.org/)
 [![Author](https://img.shields.io/badge/Author-Synge%20Todo-blue)](https://github.com/wistaria)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE-2.0.txt)
 
-# lattice
+# Lattis
 
-Simple Lattice/Graph Library
+A simple lattice/graph library
 
 ## Main functions
 
@@ -21,6 +22,13 @@ Simple Lattice/Graph Library
 
 * Rust toolchain (`rustc`, `cargo`)
 
+### For C++
+
+* C++-17 compiler
+* CMake (>= 3.14)
+* Eigen3
+* Rust toolchain (`rustc`, `cargo`) for auto-building `rust/lattis-ffi`
+
 ### For Python
 
 * Python (>= 3.9)
@@ -28,30 +36,17 @@ Simple Lattice/Graph Library
 * maturin
 * NumPy
 
-### For C++
-
-* C++-17 compiler
-* CMake (>= 3.14)
-* Eigen3
-* Rust toolchain (`rustc`, `cargo`) for auto-building `rust/lattice-ffi`
-
-Note: C++ build may invoke cargo automatically to build `rust/lattice-ffi` when the shared library is missing.
-
 ## Rust workspace
 
-The repository is being extended with a Rust core under `rust/` as the shared implementation base for future Python and Julia bindings.
+The repository uses a Rust core under `rust/` as the shared implementation base for the C++ and Python bindings and future Julia bindings.
 
-### C++ XML compatibility bridge (default)
-
-Rust-backed XML implementation is now the default C++ XML backend.
-
-When building C++ targets, CMake automatically builds `rust/lattice-ffi` with cargo if the required shared library is missing.
+When building C++ targets, CMake automatically builds `rust/lattis-ffi` with cargo if the required shared library is missing.
 
 Rust targets are managed in the workspace under `rust/`:
 
-* `lattice-core`: core model + XML parser/writer
-* `lattice-ffi`: C ABI layer for C++ compatibility
-* `lattice-python`: PyO3/maturin Python bindings
+* `lattis`: core model + XML parser/writer
+* `lattis-ffi`: C ABI layer for C++ compatibility
+* `lattis-python`: PyO3/maturin Python bindings
 
 ## Build, test, and sample run
 
@@ -70,6 +65,47 @@ with the Python instructions below.
 
 See [docs/crates.io.md](docs/crates.io.md) for crates.io release steps.
 
+Run Rust samples:
+
+```sh
+cargo run -p lattis --example construct1
+cargo run -p lattis --example construct2
+cargo run -p lattis --example construct3
+cargo run -p lattis --example construct4
+cargo run -p lattis --example construct_xml
+cargo run -p lattis --example ising
+```
+
+### C++
+
+Configure and build:
+
+```sh
+cmake -S . -B build
+cmake --build build
+```
+
+Run C++ tests:
+
+Enable tests at configure time, then run `ctest`:
+
+```sh
+cmake -S . -B build -DLATTIS_BUILD_TESTS=ON
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+Run C++ samples:
+
+```sh
+./build/example/construct1
+./build/example/construct2
+./build/example/construct3
+./build/example/construct4
+./build/example/construct_xml
+./build/example/ising
+```
+
 ### Python
 
 Create a virtual environment and install the Python extension in editable mode:
@@ -80,11 +116,11 @@ python3 -m venv .venv
 .venv/bin/python -m maturin develop
 ```
 
-From PyPI, the distribution name is `lattice-graph-core` and the import name is
-`lattice`:
+From PyPI, the distribution name is `lattis` and the import name is
+`lattis`:
 
 ```sh
-python -m pip install lattice-graph-core
+python -m pip install lattis
 ```
 
 Run the Python tests:
@@ -99,58 +135,17 @@ Run the Python example:
 .venv/bin/python python/examples/construct.py
 ```
 
-See [PyPI publishing notes](https://github.com/todo-group/lattice/blob/main/docs/pypi.md)
+See [PyPI publishing notes](https://github.com/todo-group/lattis/blob/main/docs/pypi.md)
 for release-build and PyPI upload steps.
 
 Minimal Python example:
 
 ```python
-import lattice
+import lattis
 
-graph = lattice.Graph.simple(2, 4)
+graph = lattis.graph.simple(2, 4)
 print(graph.num_sites)
 print(graph.coordinates().shape)
-```
-
-Run Rust samples:
-
-```sh
-cargo run -p lattice-core --example construct1
-cargo run -p lattice-core --example construct2
-cargo run -p lattice-core --example construct3
-cargo run -p lattice-core --example construct4
-cargo run -p lattice-core --example construct_xml
-cargo run -p lattice-core --example ising
-```
-
-### C++ (default)
-
-Configure and build:
-
-```sh
-cmake -S . -B build
-cmake --build build
-```
-
-Run C++ tests:
-
-Enable tests at configure time, then run `ctest`:
-
-```sh
-cmake -S . -B build -DLATTICE_BUILD_TESTS=ON
-cmake --build build
-ctest --test-dir build --output-on-failure
-```
-
-Run C++ samples:
-
-```sh
-./build/example/construct1
-./build/example/construct2
-./build/example/construct3
-./build/example/construct4
-./build/example/construct_xml
-./build/example/ising
 ```
 
 ### Workaround for MacOSX26.sdk
@@ -168,21 +163,21 @@ ctest --preset macos-sdk154
 Install into a prefix:
 
 ```sh
-cmake --install build-sdk154 --prefix /path/to/prefix
+cmake --install build --prefix /path/to/prefix
 ```
 
-### CMake find_package(lattice)
+### CMake find_package(lattis)
 
 Set `CMAKE_PREFIX_PATH` to the install prefix and use `find_package`:
 
 ```cmake
 cmake_minimum_required(VERSION 3.14)
-project(lattice_consumer CXX)
+project(lattis_consumer CXX)
 
-find_package(lattice REQUIRED)
+find_package(lattis REQUIRED)
 
 add_executable(app main.cpp)
-target_link_libraries(app PRIVATE lattice::lattice)
+target_link_libraries(app PRIVATE lattis::lattis)
 ```
 
 Configure example:
@@ -198,26 +193,26 @@ Set `PKG_CONFIG_PATH` and query compile/link flags:
 
 ```sh
 export PKG_CONFIG_PATH=/path/to/prefix/lib/pkgconfig:$PKG_CONFIG_PATH
-pkg-config --cflags --libs lattice
+pkg-config --cflags --libs lattis
 ```
 
 Compile example:
 
 ```sh
-c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
+c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattis) -o app
 ```
 
 ## Classes/types
 
-* lattice::basis
+* lattis::basis
 
   Helper class that contains the shape, i.e. the set of basis vectors, of the unit cell.
 
-* lattice::unitcell
+* lattis::unitcell
 
   Helper class that contains the structure, i.e. sites and bonds, of the unit cell.
 
-* lattice::graph
+* lattis::graph
 
   This class contains the structure of the whole lattice structure. It provides various information of sites (vertices) and bonds (edges) via the following member functions:
 
@@ -239,70 +234,6 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
 
 ## How to construct lattices
 
-### Python
-
-* periodic chain lattice of 16 sites
-
-  * simplest interface
-
-    ```python
-    import lattice
-
-    graph = lattice.Graph.simple(1, 16)
-    ```
-
-* periodic square lattice of 4 x 4 sites
-
-  * simplest interface
-
-    ```python
-    import lattice
-
-    graph = lattice.Graph.simple(2, 4)
-    ```
-
-  * most generic interface
-
-    ```python
-    import lattice
-
-    basis = lattice.Basis([[1.0, 0.0], [0.0, 1.0]])
-    unitcell = lattice.Unitcell(2)
-    unitcell.add_site([0.0, 0.0])
-    unitcell.add_bond(0, 0, [1, 0])
-    unitcell.add_bond(0, 0, [0, 1])
-    graph = lattice.Graph.from_basis_unitcell_extent(
-        basis,
-        unitcell,
-        [4, 4],
-        [lattice.Boundary.Periodic, lattice.Boundary.Periodic],
-    )
-    ```
-
-  * reading basis and unitcell from XML file
-
-    ```python
-    import lattice
-
-    file = "cxx/example/lattices.xml"
-    basis = lattice.read_basis_from_file(file, "square lattice")
-    cell = lattice.read_unitcell_from_file(file, "simple2d")
-    graph = lattice.Graph.from_basis_unitcell_extent(
-        basis,
-        cell,
-        [4, 4],
-        [lattice.Boundary.Periodic, lattice.Boundary.Periodic],
-    )
-    ```
-
-  * fully connected lattice of 10 sites
-
-    ```python
-    import lattice
-
-    graph = lattice.Graph.fully_connected(10)
-    ```
-
 ### Rust
 
 * periodic chain lattice of 16 sites
@@ -310,7 +241,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * simplest interface
 
     ```rust
-    use lattice_core::Graph;
+    use lattis::Graph;
 
     let graph = Graph::simple(1, 16);
     ```
@@ -318,7 +249,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * most generic interface
 
     ```rust
-    use lattice_core::{Basis, BasisMatrix, Boundary, CoordinateVector, ExtentVector, Graph, OffsetVector, Unitcell};
+    use lattis::{Basis, BasisMatrix, Boundary, CoordinateVector, ExtentVector, Graph, OffsetVector, Unitcell};
 
     let basis = Basis::new(BasisMatrix::from_row_slice(1, 1, &[1.0]));
     let mut unitcell = Unitcell::new(1);
@@ -334,7 +265,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * simplest interface
 
     ```rust
-    use lattice_core::Graph;
+    use lattis::Graph;
 
     let graph = Graph::simple(2, 4);
     ```
@@ -342,7 +273,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * most generic interface
 
     ```rust
-    use lattice_core::{Basis, BasisMatrix, Boundary, CoordinateVector, ExtentVector, Graph, OffsetVector, Unitcell};
+    use lattis::{Basis, BasisMatrix, Boundary, CoordinateVector, ExtentVector, Graph, OffsetVector, Unitcell};
 
     let basis = Basis::new(BasisMatrix::from_row_slice(2, 2, &[1.0, 0.0, 0.0, 1.0]));
     let mut unitcell = Unitcell::new(2);
@@ -357,7 +288,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * reading basis and unitcell from XML file
 
     ```rust
-    use lattice_core::{read_basis_from_file, read_unitcell_from_file, Boundary, ExtentVector, Graph};
+    use lattis::{read_basis_from_file, read_unitcell_from_file, Boundary, ExtentVector, Graph};
 
     let file = "cxx/example/lattices.xml";
     let basis = read_basis_from_file(file, "square lattice")?;
@@ -370,7 +301,7 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * fully connected lattice of 10 sites
 
     ```rust
-    use lattice_core::Graph;
+    use lattis::Graph;
 
     let graph = Graph::fully_connected(10);
     ```
@@ -382,20 +313,20 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * simplest interface
 
     ```cpp
-     lattice::graph lat = lattice::graph::simple(1, 16);
+     lattis::graph lat = lattis::graph::simple(1, 16);
      ```
 
   * most generic interface
 
     ```cpp
-     lattice::basis_t bs(1, 1); bs << 1; // 1x1 matrix
-     lattice::basis basis(bs);
-     lattice::unitcell unitcell(1);
-     unitcell.add_site(lattice::coordinate(0), 0);
-     unitcell.add_bond(0, 0, lattice::offset(1), 0);
-     lattice::span_t span(1, 1); span << 16; // 1x1 matrix
-     std::vector<lattice::boundary_t> boundary(1, lattice::boundary_t::periodic);
-     lattice::graph lat(basis, unitcell, span, boundary);
+     lattis::basis_t bs(1, 1); bs << 1; // 1x1 matrix
+     lattis::basis basis(bs);
+     lattis::unitcell unitcell(1);
+     unitcell.add_site(lattis::coordinate(0), 0);
+     unitcell.add_bond(0, 0, lattis::offset(1), 0);
+     lattis::span_t span(1, 1); span << 16; // 1x1 matrix
+     std::vector<lattis::boundary_t> boundary(1, lattis::boundary_t::periodic);
+     lattis::graph lat(basis, unitcell, span, boundary);
      ```
 
 * periodic square lattice of 4 x 4 sites
@@ -403,36 +334,100 @@ c++ -std=c++17 main.cpp $(pkg-config --cflags --libs lattice) -o app
   * simplest interface
 
     ```cpp
-     lattice::graph lat = lattice::graph::simple(2, 4);
+     lattis::graph lat = lattis::graph::simple(2, 4);
      ```
 
   * most generic interface
 
     ```cpp
-     lattice::basis_t bs(2, 2); bs << 1, 0, 0, 1; // 2x2 matrix
-     lattice::basis basis(bs);
-     lattice::unitcell unitcell(2);
-     unitcell.add_site(lattice::coordinate(0, 0), 0);
-     unitcell.add_bond(0, 0, lattice::offset(1, 0), 0);
-     unitcell.add_bond(0, 0, lattice::offset(0, 1), 0);
-     lattice::span_t span(2, 2); span << 4, 0, 0, 4; // 2x2 matrix
-     std::vector<lattice::boundary_t> boundary(2, lattice::boundary_t::periodic);
-     lattice::graph lat(basis, unitcell, span, boundary);
+     lattis::basis_t bs(2, 2); bs << 1, 0, 0, 1; // 2x2 matrix
+     lattis::basis basis(bs);
+     lattis::unitcell unitcell(2);
+     unitcell.add_site(lattis::coordinate(0, 0), 0);
+     unitcell.add_bond(0, 0, lattis::offset(1, 0), 0);
+     unitcell.add_bond(0, 0, lattis::offset(0, 1), 0);
+     lattis::span_t span(2, 2); span << 4, 0, 0, 4; // 2x2 matrix
+     std::vector<lattis::boundary_t> boundary(2, lattis::boundary_t::periodic);
+     lattis::graph lat(basis, unitcell, span, boundary);
      ```
 
   * reading basis and unitcell from XML file
 
     ```cpp
       std::string file = "lattices.xml";
-      lattice::basis bs;
+      lattis::basis bs;
       read_xml_file(file, "square lattice", bs);
-      lattice::unitcell cell;
+      lattis::unitcell cell;
       read_xml_file(file, "simple2d", cell);
-      lattice::graph lat(bs, cell, lattice::extent(4, 4));
+      lattis::graph lat(bs, cell, lattis::extent(4, 4));
       ```
 
   * fully connected lattice of 10 sites
 
     ```cpp
-    lattice::graph lat = lattice::graph::fully_connected(10);
+    lattis::graph lat = lattis::graph::fully_connected(10);
+    ```
+
+### Python
+
+* periodic chain lattice of 16 sites
+
+  * simplest interface
+
+    ```python
+    import lattis
+
+    graph = lattis.graph.simple(1, 16)
+    ```
+
+* periodic square lattice of 4 x 4 sites
+
+  * simplest interface
+
+    ```python
+    import lattis
+
+    graph = lattis.graph.simple(2, 4)
+    ```
+
+  * most generic interface
+
+    ```python
+    import lattis
+
+    basis = lattis.Basis([[1.0, 0.0], [0.0, 1.0]])
+    unitcell = lattis.Unitcell(2)
+    unitcell.add_site([0.0, 0.0])
+    unitcell.add_bond(0, 0, [1, 0])
+    unitcell.add_bond(0, 0, [0, 1])
+    graph = lattis.graph.from_basis_unitcell_extent(
+        basis,
+        unitcell,
+        [4, 4],
+        [lattis.Boundary.Periodic, lattis.Boundary.Periodic],
+    )
+    ```
+
+  * reading basis and unitcell from XML file
+
+    ```python
+    import lattis
+
+    file = "cxx/example/lattices.xml"
+    basis = lattis.read_basis_from_file(file, "square lattice")
+    cell = lattis.read_unitcell_from_file(file, "simple2d")
+    graph = lattis.graph.from_basis_unitcell_extent(
+        basis,
+        cell,
+        [4, 4],
+        [lattis.Boundary.Periodic, lattis.Boundary.Periodic],
+    )
+    ```
+
+  * fully connected lattice of 10 sites
+
+    ```python
+    import lattis
+
+    graph = lattis.graph.fully_connected(10)
     ```

@@ -17,10 +17,10 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include "lattice/graph.hpp"
+#include "lattis/graph.hpp"
 #include "observable.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 int main() {
   std::cout << "Metropolis Algorithm for Classical Ferromagnetic Ising Model\n";
@@ -31,7 +31,7 @@ int main() {
   // square lattice
   std::size_t dim = 2;
   std::size_t length = 32;
-  lattice::graph lat = lattice::graph::simple(dim, length);
+  lattis::graph lat = lattis::graph::simple(dim, length);
 
   // random number generators
   int seed = 12345;

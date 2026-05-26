@@ -1,0 +1,18 @@
+[package]
+name = "lattis-python"
+version.workspace = true
+edition = "2021"
+license = "Apache-2.0"
+description = "Python bindings for lattis"
+repository = "https://github.com/todo-group/lattis"
+readme = "../../README.md"
+keywords = ["lattice", "graph", "physics", "python"]
+
+[lib]
+name = "lattis"
+crate-type = ["cdylib"]
+
+[dependencies]
+lattis_core = { package = "lattis", path = "../lattis" }
+numpy = "0.25"
+pyo3 = { version = "0.25", features = ["extension-module"] }

@@ -15,9 +15,9 @@
 */
 
 #include "gtest/gtest.h"
-#include "lattice/coloring.hpp"
+#include "lattis/coloring.hpp"
 
-using namespace lattice;
+using namespace lattis;
 
 void check(const graph& lat) {
   auto color = coloring(lat);
