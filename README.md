@@ -116,11 +116,11 @@ python3 -m venv .venv
 .venv/bin/python -m maturin develop
 ```
 
-From PyPI, the distribution name is `lattis` and the import name is
+From PyPI, the distribution name is `pylattis` and the import name is
 `lattis`:
 
 ```sh
-python -m pip install lattis
+python -m pip install pylattis
 ```
 
 Run the Python tests:

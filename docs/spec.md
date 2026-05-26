@@ -11,7 +11,13 @@ kept for C++ compatibility through the C ABI.
 
 **Packaging**
 
-The PyPI distribution and Python import name are both:
+The PyPI distribution name is:
+
+```text
+pylattis
+```
+
+The Python import name is:
 
 ```text
 lattis
