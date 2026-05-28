@@ -1,0 +1,13 @@
+name = "Lattis"
+uuid = "7d2e9a9b-7e38-4b40-8e68-2ce6ff8d5b66"
+authors = ["Lattis contributors"]
+version = "0.1.0"
+
+[compat]
+julia = ">=1.9"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
