@@ -40,6 +40,8 @@ A simple lattice/graph library
 
 The repository uses a Rust core under `rust/` as the shared implementation base for the C++ and Python bindings and future Julia bindings.
 
+Julia binding design proposal: [docs/julia-bindings.md](docs/julia-bindings.md).
+
 When building C++ targets, CMake automatically builds `rust/lattis-ffi` with cargo if the required shared library is missing.
 
 Rust targets are managed in the workspace under `rust/`:
